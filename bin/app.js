@@ -4,6 +4,7 @@ const net = require('net')
 const fs = require('fs')
 const path = require('path')
 const http = require('http')
+const child_process = require('child_process')
 const open = require('open')
 const log = console.log
 const chalk = require('../src/chalk')
@@ -118,7 +119,8 @@ function serveStart(port) {
         }).listen(port, () => {
             let href = `http://localhost:${port}`
             logMet.success('已启动本地服务：' + href)
-            open(href)
+            // open(href)
+            child_process.exec(`start ${href}`)
         })
     })
 }
