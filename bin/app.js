@@ -35,7 +35,15 @@ if (!root) {
 }
 function portInuse(port) {
     return new Promise((resolve, reject) => {
-        let server = net.createServer().listen(port);
+        /**
+         * 检测已经被占用的端口  https://github.com/nodejs/node/issues/36021
+         * https://docs.microsoft.com/en-us/windows/win32/winsock/using-so-reuseaddr-and-so-exclusiveaddruse
+         * 如果不加host，直接listen(port)，则对于已经被其他项目使用绑定的端口检测不出来
+         */
+        let server = net.createServer().listen({
+            port,
+            host: '0.0.0.0'
+        });
         server.on('listening', () => {
             // server.close()
             resolve(server);
